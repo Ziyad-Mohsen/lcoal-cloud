@@ -1,5 +1,7 @@
 import { QueryClient } from "@tanstack/react-query";
 
+// TODO: use query keys map
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
