@@ -16,6 +16,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useStoragePath } from "@/hooks/useStoragePath";
 import { deleteFile } from "@/api/files.api";
 import type { FileDialogProps } from "./types";
+import { QUERY_KEYS, type QueryKeyType } from "@/lib/queryClient";
 
 export default function DeleteFileDialog({
   open = false,
@@ -30,8 +31,13 @@ export default function DeleteFileDialog({
       setIsOpen(false);
       toast(data.message);
       queryClient.invalidateQueries({
-        predicate: (query) =>
-          ["files", "storageInfo"].includes(query.queryKey[0] as string),
+        predicate: (query) => {
+          const queryKeys: QueryKeyType[] = [
+            QUERY_KEYS.FILES,
+            QUERY_KEYS.STORAGE_INFO,
+          ];
+          return queryKeys.includes(query.queryKey[0] as QueryKeyType);
+        },
       });
     },
     onError: (error) => {

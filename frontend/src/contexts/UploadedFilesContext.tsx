@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/lib/axios";
-import queryClient from "@/lib/queryClient";
+import queryClient, { QUERY_KEYS } from "@/lib/queryClient";
 import React, { createContext, useContext, useState } from "react";
 
 type UploadState = "waiting..." | "in progress" | "completed" | "failed";
@@ -91,7 +91,7 @@ export default function UploadedFilesProvider({
           },
         });
 
-        queryClient.invalidateQueries({ queryKey: ["files"] });
+        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.FILES] });
         setUploadedFiles((prevFiles) =>
           prevFiles.map((file) =>
             file.id === selectedFile.id

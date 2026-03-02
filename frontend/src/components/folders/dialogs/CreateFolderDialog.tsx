@@ -23,6 +23,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { useStoragePath } from "@/hooks/useStoragePath";
 import { joinPath } from "@/lib/utils";
+import { QUERY_KEYS, type QueryKeyType } from "@/lib/queryClient";
 
 export function CreateFolderDialog() {
   const path = useStoragePath();
@@ -37,8 +38,13 @@ export function CreateFolderDialog() {
       setOpen(false);
       toast.success(`Created "${folderName}" folder`);
       queryClient.invalidateQueries({
-        predicate: (query) =>
-          ["files", "storageInfo"].includes(query.queryKey[0] as string),
+        predicate: (query) => {
+          const queryKeys: QueryKeyType[] = [
+            QUERY_KEYS.FILES,
+            QUERY_KEYS.STORAGE_INFO,
+          ];
+          return queryKeys.includes(query.queryKey[0] as QueryKeyType);
+        },
       });
     },
     onError: (error) => {
