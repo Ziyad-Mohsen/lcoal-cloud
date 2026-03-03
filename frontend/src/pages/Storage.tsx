@@ -3,7 +3,7 @@ import { useEffect, useState, type ReactNode } from "react";
 import type { FileStats } from "@/../../backend/types/index.ts";
 import FilesTableView from "@/components/views/FilesTableView";
 import FilesCardsView from "@/components/views/FilesCardsView";
-import { FolderX, LayoutGrid, TableProperties } from "lucide-react";
+import { FolderX, LayoutGrid, RefreshCcw, TableProperties } from "lucide-react";
 import { twMerge } from "tailwind-merge";
 import {
   Breadcrumb,
@@ -18,6 +18,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { useStoragePath } from "@/hooks/useStoragePath";
 import { joinPath } from "@/lib/utils";
 import { NoFilesComponent } from "@/components/views/NoFilesComponent";
+import { Button } from "@/components/ui/button";
+import queryClient, { QUERY_KEYS, type QueryKeyType } from "@/lib/queryClient";
 
 type View = "tables" | "cards";
 
@@ -31,7 +33,7 @@ const getView = (view: View, files: FileStats[]): ReactNode => {
 
 export default function Storage() {
   const [view, setView] = useState<View>(
-    (sessionStorage.getItem("filesView") as View) || "tables",
+    (localStorage.getItem("filesView") as View) || "cards",
   );
 
   const path = useStoragePath("/");
@@ -51,8 +53,17 @@ export default function Storage() {
   });
 
   useEffect(() => {
-    sessionStorage.setItem("filesView", view);
+    localStorage.setItem("filesView", view);
   }, [view]);
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({
+      predicate: (query) => {
+        const queryKeys: QueryKeyType[] = [QUERY_KEYS.FILES];
+        return queryKeys.includes(query.queryKey[0] as QueryKeyType);
+      },
+    });
+  };
 
   return (
     <main className="w-full">
@@ -98,27 +109,32 @@ export default function Storage() {
             </BreadcrumbList>
           </Breadcrumb>
 
-          <button
-            className="flex items-center bg-secondary p-1 rounded-lg cursor-pointer"
-            onClick={() => setView(view === "tables" ? "cards" : "tables")}
-          >
-            <div
-              className={twMerge(
-                "rounded-md p-2",
-                view === "cards" && "bg-accent",
-              )}
+          <div className="flex items-center gap-2">
+            <Button size="lg" variant="secondary" onClick={handleRefresh}>
+              Refresh <RefreshCcw />
+            </Button>
+            <button
+              className="flex items-center bg-secondary p-1 rounded-lg cursor-pointer"
+              onClick={() => setView(view === "tables" ? "cards" : "tables")}
             >
-              <LayoutGrid strokeWidth={1} />
-            </div>
-            <div
-              className={twMerge(
-                "rounded-md p-2",
-                view === "tables" && "bg-accent",
-              )}
-            >
-              <TableProperties strokeWidth={1} />
-            </div>
-          </button>
+              <div
+                className={twMerge(
+                  "rounded-md p-2",
+                  view === "cards" && "bg-accent",
+                )}
+              >
+                <LayoutGrid size={16} />
+              </div>
+              <div
+                className={twMerge(
+                  "rounded-md p-2",
+                  view === "tables" && "bg-accent",
+                )}
+              >
+                <TableProperties size={16} />
+              </div>
+            </button>
+          </div>
         </div>
 
         {(isPending || isFetching) && (
