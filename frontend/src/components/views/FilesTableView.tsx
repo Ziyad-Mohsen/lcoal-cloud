@@ -45,74 +45,63 @@ export default function FilesTableView({ files }: { files: FileStats[] }) {
             </TableCell>
           </TableRow>
         )}
-        {files && files.length ? (
-          files.map((file, i) => {
-            const fileConfig = getFileConfig({
-              extension: file.extension,
-              mimeType: file.mimeType,
-            });
-            const Icon = fileConfig.icon;
-            const filePath = path.join(file.name);
-            return (
-              <TableRow key={i}>
-                <TableCell
-                  colSpan={file.isFile ? 1 : 4}
-                  className="font-medium py-0"
-                >
-                  {file.isFile ? (
-                    <div className="flex gap-2 items-end py-4">
-                      <Icon
-                        strokeWidth={1}
-                        style={{ color: fileConfig.color }}
-                      />
-                      <span>{file.name}</span>
-                    </div>
-                  ) : (
-                    <Link
-                      to={file.name}
-                      className="flex gap-2 items-end w-full h-full py-4"
+        {files.map((file, i) => {
+          const fileConfig = getFileConfig({
+            extension: file.extension,
+            mimeType: file.mimeType,
+          });
+          const Icon = fileConfig.icon;
+          const filePath = path.join(file.name);
+          return (
+            <TableRow key={i}>
+              <TableCell
+                colSpan={file.isFile ? 1 : 4}
+                className="font-medium py-0"
+              >
+                {file.isFile ? (
+                  <div className="flex gap-2 items-end py-4">
+                    <Icon strokeWidth={1} style={{ color: fileConfig.color }} />
+                    <span>{file.name}</span>
+                  </div>
+                ) : (
+                  <Link
+                    to={file.name}
+                    className="flex gap-2 items-end w-full h-full py-4"
+                  >
+                    <Folder strokeWidth={1} />
+                    <span>{file.name}</span>
+                    <div
+                      className="ml-auto"
+                      onClick={(e: MouseEvent<HTMLDivElement>) => {
+                        e.stopPropagation();
+                      }}
                     >
-                      <Folder strokeWidth={1} />
-                      <span>{file.name}</span>
-                      <div
-                        className="ml-auto"
-                        onClick={(e: MouseEvent<HTMLDivElement>) => {
-                          e.stopPropagation();
-                        }}
-                      >
-                        <FolderDropDownMenu folder={file} />
-                      </div>
-                    </Link>
-                  )}
-                </TableCell>
-                {file.isFile && (
-                  <>
-                    <TableCell>{formatFileSize(file.size)}</TableCell>
-                    <TableCell>
-                      {formatRelativeDate(Date.parse(file.createdAt))}
-                    </TableCell>
-                    <TableCell align="right" className="space-x-2">
-                      <Button size="icon-sm" variant="outline" asChild>
-                        <Link
-                          to={`${apiBaseUrl}/files/download?path=${filePath}`}
-                        >
-                          <Download />
-                        </Link>
-                      </Button>
-                      <FileDropDownMenu file={file} />
-                    </TableCell>
-                  </>
+                      <FolderDropDownMenu folder={file} />
+                    </div>
+                  </Link>
                 )}
-              </TableRow>
-            );
-          })
-        ) : (
-          <TableRow>
-            <TableCell colSpan={3} className="text-center">
-              No files
-            </TableCell>
-          </TableRow>
-        )}
+              </TableCell>
+              {file.isFile && (
+                <>
+                  <TableCell>{formatFileSize(file.size)}</TableCell>
+                  <TableCell>
+                    {formatRelativeDate(Date.parse(file.createdAt))}
+                  </TableCell>
+                  <TableCell align="right" className="space-x-2">
+                    <Button size="icon-sm" variant="outline" asChild>
+                      <Link
+                        to={`${apiBaseUrl}/files/download?path=${filePath}`}
+                      >
+                        <Download />
+                      </Link>
+                    </Button>
+                    <FileDropDownMenu file={file} />
+                  </TableCell>
+                </>
+              )}
+            </TableRow>
+          );
+        })}
       </TableBody>
     </Table>
   );

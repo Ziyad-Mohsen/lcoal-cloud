@@ -71,7 +71,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar>
-      <SidebarHeader className="bg-background border-b p-3">
+      <SidebarHeader className="p-3">
         <SidebarMenu>
           <Logo />
         </SidebarMenu>

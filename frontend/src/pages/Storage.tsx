@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Spinner } from "@/components/ui/spinner";
 import { useStoragePath } from "@/hooks/useStoragePath";
 import { joinPath } from "@/lib/utils";
+import { NoFilesComponent } from "@/components/views/NoFilesComponent";
 
 type View = "tables" | "cards";
 
@@ -25,7 +26,7 @@ const getView = (view: View, files: FileStats[]): ReactNode => {
     tables: <FilesTableView files={files} />,
     cards: <FilesCardsView files={files} />,
   };
-  return viewOptions[view];
+  return files.length ? viewOptions[view] : <NoFilesComponent />;
 };
 
 export default function Storage() {
