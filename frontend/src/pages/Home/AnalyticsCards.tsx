@@ -37,6 +37,11 @@ export default function AnalyticsCards() {
                 {data?.videos}
               </p>
             </AnalyticsCard>
+            <AnalyticsCard tag="Audio" fileConfig={FILE_TYPE_CONFIG.audio}>
+              <p className="text-2xl sm:text-3xl font-bold text-foreground">
+                {data?.audio}
+              </p>
+            </AnalyticsCard>
             <AnalyticsCard tag="Images" fileConfig={FILE_TYPE_CONFIG.image}>
               <p className="text-2xl sm:text-3xl font-bold text-foreground">
                 {data?.images}

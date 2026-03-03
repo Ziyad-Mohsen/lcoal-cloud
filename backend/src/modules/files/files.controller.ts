@@ -22,6 +22,7 @@ export const filesCount = async (
       const result = {
         total: 0,
         videos: 0,
+        audio: 0,
         images: 0,
         text: 0,
         others: 0,
@@ -48,6 +49,9 @@ export const filesCount = async (
               break;
             case "video":
               result.videos++;
+              break;
+            case "audio":
+              result.audio++;
               break;
             case "text":
               result.text++;

@@ -18,6 +18,7 @@ export type FileStats = {
 export type FilesCount = {
   total: number;
   videos: number;
+  audio: number;
   images: number;
   text: number;
   others: number;

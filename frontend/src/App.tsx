@@ -12,7 +12,7 @@ export default function App() {
       <SidebarProvider className="flex h-screen">
         <div className="flex items-stretch w-full">
           <AppSidebar />
-          <div className="flex-1 overflow-auto">
+          <div className="flex-1 overflow-x-hidden overflow-y-auto">
             <Header />
             <Routes>
               <Route path={ROUTES.ROOT} element={<Home />} />
