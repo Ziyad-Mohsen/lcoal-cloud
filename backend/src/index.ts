@@ -7,9 +7,12 @@ import express, {
   type Response,
 } from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import filesRouter from "./modules/files/files.routes.ts";
 import foldersRouter from "./modules/folders/folder.routes.ts";
 import { errorHandler } from "./middlewares/index.ts";
+
+dotenv.config();
 
 const app: Application = express();
 
@@ -55,6 +58,7 @@ const getLocalIpAddress = () => {
 
 const myIp = getLocalIpAddress();
 const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
+console.log(process.env.PORT)
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`Server running on:`);

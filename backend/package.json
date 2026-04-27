@@ -34,6 +34,7 @@
   "dependencies": {
     "@types/multer": "^2.0.0",
     "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
     "eslint-plugin-prettier": "^5.5.5",
     "express": "^5.2.1",
     "get-folder-size": "^5.0.0",
